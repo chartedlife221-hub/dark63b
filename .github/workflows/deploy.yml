@@ -25,8 +25,6 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Type check
-        # Informational until the first green run confirms types; the build itself does not depend on it.
-        continue-on-error: true
         run: npm run typecheck
       - name: Build
         env:
