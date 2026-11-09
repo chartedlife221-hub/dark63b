@@ -9,6 +9,7 @@ import { Wall } from "./components/Wall";
 import { Roadmap } from "./components/Roadmap";
 import { Footer } from "./components/Footer";
 import { FilmViewer } from "./components/FilmViewer";
+import { AmbientBackdrop } from "./components/AmbientBackdrop";
 import { startAmbient, stopAmbient } from "./lib/ambient";
 import { prefersReducedMotion } from "./lib/env";
 
@@ -118,6 +119,7 @@ export function App() {
 
   return (
     <>
+      <AmbientBackdrop />
       <Nav sound={sound} onSound={toggleSound} />
       <main>
         <Hero onWatch={openFilm} />

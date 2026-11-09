@@ -5,6 +5,8 @@ export const MEDIA = {
   heroFilm720: asset("media/dark63b-film-720-silent.mp4"),
   heroFilm1080: asset("media/dark63b-film-1080-silent.mp4"),
   film: asset("media/dark63b-film-1080.mp4"),
+  ambientLoop: asset("media/dark63b-ambient-loop.mp4"),
+  ambientStill: asset("media/ambient-still.jpg"),
   poster: asset("media/film-poster-end.jpg"),
   poster720: asset("media/film-poster-end-720.jpg"),
   logo640: asset("img/dark63b-logo-640.webp"),

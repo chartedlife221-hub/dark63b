@@ -30,6 +30,13 @@
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --ease-film: cubic-bezier(0.22, 0.61, 0.24, 1);
 
+  /* Dark glass: panels the emblem glows through. */
+  --glass: rgba(12, 10, 8, 0.58);
+  --glass-strong: rgba(10, 8, 6, 0.72);
+  --glass-edge: rgba(232, 220, 196, 0.1);
+  --glass-blur: blur(16px) saturate(1.15);
+  --glass-shine: inset 0 1px 0 rgba(255, 238, 205, 0.07), 0 30px 60px -40px rgba(0, 0, 0, 0.9);
+
   color-scheme: dark;
 }
 
@@ -51,7 +58,8 @@ html.is-locked {
 
 body {
   margin: 0;
-  background: var(--black);
+  /* Transparent so the fixed ambient emblem (z-index -1) shows through; html stays black. */
+  background: transparent;
   color: var(--bone);
   font-family: var(--text);
   font-size: var(--step-0);
@@ -744,13 +752,87 @@ p {
 }
 
 /* ============================================================
+   Ambient backdrop — the emblem behind every chapter
+   ============================================================ */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 2.2s var(--ease-film);
+}
+.ambient[data-on] {
+  opacity: 1;
+}
+.ambient__frame {
+  position: relative;
+  width: min(118vw, 64vh);
+  aspect-ratio: 9 / 16;
+  opacity: 0.18;
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 55%, transparent 100%);
+}
+.ambient__still,
+.ambient__film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Edge vignette keeps reading areas calm. */
+.ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(75% 65% at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.75) 100%);
+}
+@media (min-width: 900px) {
+  .ambient__frame {
+    width: min(70vw, 78vh);
+    opacity: 0.26;
+  }
+}
+
+/* ============================================================
+   Dark glass panels
+   ============================================================ */
+.scale-field,
+.plaque,
+.lessons,
+.coin__card,
+.ledger,
+.share,
+.phase {
+  background: var(--glass);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shine);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+@media (max-width: 760px) {
+  .scale-field,
+  .plaque,
+  .lessons,
+  .coin__card,
+  .ledger,
+  .share,
+  .phase {
+    background: var(--glass-strong);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* ============================================================
    Story — digital museum exhibit
    ============================================================ */
 .scale-field {
   margin: 0 0 3rem;
   padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid var(--line-soft);
-  background: radial-gradient(120% 90% at 50% 0%, rgba(240, 166, 64, 0.05), transparent 60%), var(--basalt);
 }
 .scale-field__canvas {
   width: 100%;
@@ -783,9 +865,7 @@ p {
 .measures {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line-soft);
-  border: 1px solid var(--line-soft);
+  gap: 1rem;
 }
 .plaque,
 .pillar,
@@ -796,8 +876,7 @@ p {
 .plaque {
   position: relative;
   padding: 2rem 1.75rem 1.75rem;
-  background: var(--black);
-  transition: background-color 0.6s;
+  transition: background-color 0.6s, border-color 0.6s;
 }
 .plaque::before {
   content: "";
@@ -810,6 +889,10 @@ p {
 }
 .plaque:hover::before {
   opacity: 1;
+}
+.plaque:hover,
+.phase:hover {
+  border-color: rgba(201, 161, 91, 0.32);
 }
 .plaque__figure {
   font-family: var(--display);
@@ -880,8 +963,8 @@ html:not(.motion-ok) .timeline::after {
   left: calc(-1 * clamp(3.5rem, 8vw, 6rem) + clamp(1.1rem, 3vw, 2rem));
   top: 0.15rem;
   transform: translateX(-50%);
-  padding: 0.3rem 0;
-  background: var(--black);
+  padding: 0.5rem 0.4rem;
+  background: radial-gradient(closest-side, #000 55%, transparent);
   font-family: var(--display);
   font-style: italic;
   font-size: 1.05rem;
@@ -1027,8 +1110,6 @@ html:not(.motion-ok) .pillar__light::after {
 .lessons {
   margin-top: clamp(5rem, 10vw, 7.5rem);
   padding: clamp(2rem, 4vw, 3rem);
-  border: 1px solid var(--line-soft);
-  background: var(--basalt);
 }
 .lessons__title {
   font-family: var(--display);
@@ -1077,8 +1158,7 @@ html:not(.motion-ok) .pillar__light::after {
   margin-bottom: 0;
 }
 .coin__card {
-  border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(201, 161, 91, 0.05), transparent 40%), var(--basalt);
+  border-color: var(--line);
   padding: clamp(1.5rem, 3vw, 2.25rem);
 }
 .coin__status {
@@ -1123,8 +1203,7 @@ html:not(.motion-ok) .pillar__light::after {
    Transparency
    ============================================================ */
 .ledger {
-  border: 1px solid var(--line);
-  background: var(--basalt);
+  border-color: var(--line);
 }
 .ledger__head {
   display: flex;
@@ -1304,8 +1383,7 @@ html:not(.motion-ok) .pillar__light::after {
 }
 .share {
   padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--line);
-  background: radial-gradient(100% 70% at 50% 0%, rgba(240, 166, 64, 0.07), transparent 70%), var(--basalt);
+  border-color: var(--line);
 }
 .share__title {
   font-family: var(--display);
@@ -1340,17 +1418,14 @@ html:not(.motion-ok) .pillar__light::after {
 .phases {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
+  gap: 1rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  background: var(--line-soft);
-  border: 1px solid var(--line-soft);
 }
 .phase {
   position: relative;
   padding: 1.75rem 1.5rem 2rem;
-  background: var(--black);
 }
 .phase::before {
   content: "";
@@ -1404,7 +1479,7 @@ html:not(.motion-ok) .pillar__light::after {
 .footer {
   padding: clamp(5rem, 10vw, 7rem) 0 calc(2.5rem + env(safe-area-inset-bottom));
   border-top: 1px solid var(--line-soft);
-  background: linear-gradient(180deg, var(--black), var(--basalt));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55), rgba(12, 10, 8, 0.92));
 }
 .footer__brand {
   display: flex;
