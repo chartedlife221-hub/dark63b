@@ -27,8 +27,8 @@ The dev server mirrors the GitHub Pages path (`/dark63b/`) and supports HTTP ran
 
 ## Deploy
 
-1. In the repository on GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-2. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds and publishes `dist/`.
+1. In the repository on GitHub: **Settings → Pages → Source: Deploy from a branch → `gh-pages` / root** (already set).
+2. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds the site and publishes `dist/` to the `gh-pages` branch, which Pages serves.
 
 All asset URLs are relative, so the site also works on a custom domain or another repository name. Set `SITE_URL` when building elsewhere so social previews point to the right address.
 
