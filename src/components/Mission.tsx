@@ -9,7 +9,7 @@ const PILLARS = [
   },
   {
     name: "Give back",
-    body: "If the community coin launches, direct its creator fees to documented public-benefit causes, and publish every step so anyone can check it.",
+    body: "Once the community coin launches on pump.fun, direct its creator fees to documented public-benefit causes, and publish every step so anyone can check it.",
   },
 ];
 

@@ -6,6 +6,8 @@
  */
 
 export interface TokenDetails {
+  /** Planned launch venue, stated by the founder. */
+  platform: string | null;
   network: string | null;
   contract: string | null;
   totalSupply: string | null;
@@ -14,7 +16,9 @@ export interface TokenDetails {
 }
 
 export const TOKEN: TokenDetails = {
-  network: null,
+  platform: "pump.fun (planned)",
+  network: "Solana (planned)",
+  // Paste the real mint address here on launch day. Until then, no contract UI is shown.
   contract: null,
   totalSupply: null,
   launched: false,
@@ -81,6 +85,7 @@ export const ROADMAP: Phase[] = [
     status: "Not started",
     deliverables: [
       "Verified official channels",
+      "Community coin launch on pump.fun, contract published here first",
       "Security education features",
       "Moderated community wall",
     ],
